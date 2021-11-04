@@ -1,0 +1,29 @@
+.header {
+  background-color: #1c1c21;
+}
+
+.mainNav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 1280px;
+  width: 100%;
+  margin: auto;
+}
+
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+}
+
+.navItem:last-child {
+  flex-grow: 1;
+  justify-content: flex-end;
+}
