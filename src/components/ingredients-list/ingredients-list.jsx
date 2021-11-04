@@ -19,7 +19,8 @@ const IngredientsList = ({ ingredients, title }) => {
 };
 
 IngredientsList.propTypes = {
-  ingredients: pt.arrayOf(PropValidator.INGREDIENT),
+  title: pt.string.isRequired,
+  ingredients: pt.arrayOf(PropValidator.INGREDIENT).isRequired,
 };
 
 export default IngredientsList;

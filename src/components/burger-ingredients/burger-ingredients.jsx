@@ -71,7 +71,7 @@ const BurgerIngredients = ({ data }) => {
 };
 
 BurgerIngredients.propTypes = {
-  data: pt.arrayOf(PropValidator.INGREDIENT),
+  data: pt.arrayOf(PropValidator.INGREDIENT).isRequired,
 };
 
 export default BurgerIngredients;

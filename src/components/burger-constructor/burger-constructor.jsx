@@ -26,8 +26,8 @@ const BurgerConstructor = ({ data }) => {
           thumbnail={ingredients[0].image}
         />
         <ul className={`${s.ingredientsList} pr-4 pl-4`}>
-          {ingredients.slice(1, 9).map(({ _id, name, price, image }) => (
-            <li key={_id} className={s.ingredientItem}>
+          {ingredients.slice(1, 9).map(({ name, price, image }, index) => (
+            <li key={index} className={s.ingredientItem}>
               <DragIcon type="primary" />
               <ConstructorElement
                 isLocked={false}
@@ -60,7 +60,7 @@ const BurgerConstructor = ({ data }) => {
 };
 
 BurgerConstructor.propTypes = {
-  data: pt.arrayOf(PropValidator.INGREDIENT),
+  data: pt.arrayOf(PropValidator.INGREDIENT).isRequired,
 };
 
 export default BurgerConstructor;
