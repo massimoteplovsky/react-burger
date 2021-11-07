@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.name {
+  text-align: center;
+}
+
+.energyValueBlock {
+  display: flex;
+  gap: 20px;
+}
+
+.valueItem {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}

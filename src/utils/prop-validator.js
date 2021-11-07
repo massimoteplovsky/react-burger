@@ -14,5 +14,5 @@ export const PropValidator = {
     image_mobile: string.isRequired,
     image_large: string.isRequired,
     __v: number.isRequired,
-  }).isRequired,
+  }),
 };

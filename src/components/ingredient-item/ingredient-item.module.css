@@ -5,6 +5,12 @@
   position: relative;
   max-width: 272px;
   width: 100%;
+  cursor: pointer;
+  transition: all 0.2s linear;
+}
+
+.ingredientItem:hover {
+  transform: scale(1.05);
 }
 
 .image {
