@@ -1,0 +1,18 @@
+.errorWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.errorContainer {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.errorContainer > svg {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 30px;
+}
