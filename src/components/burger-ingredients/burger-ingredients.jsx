@@ -1,8 +1,13 @@
-import { useState, useCallback, useMemo } from 'react';
-import pt from 'prop-types';
+import { useState, useCallback, useMemo, useContext, memo } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import s from './burger-ingredients.module.css';
-import { PropValidator } from '../../utils/prop-validator';
+import { AppContext } from '../../services/app-context';
+import { ModalType } from '../../utils/constants';
+import {
+  SET_INGREDIENT,
+  ADD_BUN_INGREDIENT,
+  ADD_MAIN_INGREDIENT,
+} from '../../services/modules/app';
 
 // Components
 import IngredientsList from '../ingredients-list/ingredients-list';
@@ -28,8 +33,21 @@ const tabItems = [
   },
 ];
 
-const BurgerIngredients = ({ ingredients, handleSetModalData }) => {
+const BurgerIngredients = () => {
   const [current, setCurrent] = useState(IngredientType.BUN);
+  const {
+    ingredients,
+    burgerData: { bunIngredient, mainIngredients },
+    dispatch,
+  } = useContext(AppContext);
+
+  const burgerIngredients = useMemo(
+    () =>
+      bunIngredient
+        ? [bunIngredient, ...mainIngredients]
+        : [...mainIngredients],
+    [bunIngredient, mainIngredients]
+  );
 
   const filteredIngredients = useMemo(
     () =>
@@ -48,9 +66,18 @@ const BurgerIngredients = ({ ingredients, handleSetModalData }) => {
 
   const handleClickIngredientItem = useCallback(
     (ingredient) => {
-      handleSetModalData(ingredient);
+      dispatch({
+        type: SET_INGREDIENT,
+        payload: { ingredient, modalType: ModalType.INGREDIENT },
+      });
+
+      if (ingredient.type === IngredientType.BUN) {
+        return dispatch({ type: ADD_BUN_INGREDIENT, payload: ingredient });
+      }
+
+      dispatch({ type: ADD_MAIN_INGREDIENT, payload: ingredient });
     },
-    [handleSetModalData]
+    [dispatch]
   );
 
   return (
@@ -78,6 +105,7 @@ const BurgerIngredients = ({ ingredients, handleSetModalData }) => {
             key={type}
             title={name}
             ingredients={filteredIngredients[type]}
+            burgerIngredients={burgerIngredients}
             handleClickIngredientItem={handleClickIngredientItem}
           />
         ))}
@@ -86,9 +114,4 @@ const BurgerIngredients = ({ ingredients, handleSetModalData }) => {
   );
 };
 
-BurgerIngredients.propTypes = {
-  ingredients: pt.arrayOf(PropValidator.INGREDIENT).isRequired,
-  handleSetModalData: pt.func.isRequired,
-};
-
-export default BurgerIngredients;
+export default memo(BurgerIngredients);
