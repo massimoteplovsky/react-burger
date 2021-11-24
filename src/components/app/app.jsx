@@ -1,6 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useReducer, useEffect } from 'react';
 import s from './app.module.css';
-import { ModalType } from '../../utils/constants';
+import { AppContext } from '../../services/app-context';
+import { ENDPOINT, ApiRoute } from '../../utils/constants';
+import appReducer, {
+  FETCH_INGREDIENTS,
+  FETCH_INGREDIENTS_ERROR,
+} from '../../services/modules/app';
 
 // Components
 import AppHeader from '../app-header/app-header';
@@ -15,18 +20,23 @@ import withModal from '../hocs/with-modal';
 const WithModalBurgerConstructor = withModal(BurgerConstructor);
 const WithModalBurgerIngredients = withModal(BurgerIngredients);
 
-const ENDPOINT = 'https://norma.nomoreparties.space/api';
-const ApiRoute = {
-  INGREDIENTS: 'ingredients',
+const initialAppState = {
+  ingredients: [],
+  ingredient: null,
+  burgerData: {
+    bunIngredient: null,
+    mainIngredients: [],
+  },
+  orderNumber: null,
+  totalPrice: 0,
+  modalType: null,
+  loading: true,
+  error: false,
 };
 
 const App = () => {
-  const [state, setState] = useState({
-    ingredients: [],
-    loading: true,
-    error: false,
-  });
-  const { ingredients, loading, error } = state;
+  const [state, dispatch] = useReducer(appReducer, initialAppState);
+  const { loading, error } = state;
 
   useEffect(() => {
     const getData = async () => {
@@ -35,16 +45,17 @@ const App = () => {
 
         if (response?.ok) {
           const { data: ingredients } = await response.json();
-          return setState((state) => ({
-            ...state,
-            ingredients,
-            loading: false,
-          }));
+          return dispatch({
+            type: FETCH_INGREDIENTS,
+            payload: ingredients,
+          });
         }
 
         throw new Error();
       } catch (err) {
-        setState((state) => ({ ...state, loading: false, error: true }));
+        dispatch({
+          type: FETCH_INGREDIENTS_ERROR,
+        });
       }
     };
     getData();
@@ -59,14 +70,10 @@ const App = () => {
         <Error>Произошла ошибка при загрузке данных...</Error>
       ) : (
         <main className={`${s.container} pb-10`}>
-          <WithModalBurgerIngredients
-            ingredients={ingredients}
-            modalType={ModalType.INGREDIENT}
-          />
-          <WithModalBurgerConstructor
-            ingredients={ingredients}
-            modalType={ModalType.ORDER}
-          />
+          <AppContext.Provider value={{ ...state, dispatch }}>
+            <WithModalBurgerIngredients />
+            <WithModalBurgerConstructor />
+          </AppContext.Provider>
         </main>
       )}
     </>

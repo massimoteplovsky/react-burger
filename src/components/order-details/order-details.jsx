@@ -1,9 +1,8 @@
 import pt from 'prop-types';
-import OrderAccepted from '../../images/done.png';
+import OrderAccepted from '../../images/done.gif';
 import s from './order-details.module.css';
 
-const OrderDetails = ({ orderData }) => {
-  const { orderNumber } = orderData;
+const OrderDetails = ({ orderNumber }) => {
   return (
     <div className={s.container}>
       <h2 className="text text_type_digits-large mb-8">{orderNumber}</h2>
@@ -20,7 +19,7 @@ const OrderDetails = ({ orderData }) => {
 };
 
 OrderDetails.propTypes = {
-  orderData: pt.shape({ orderNumber: pt.number.isRequired }).isRequired,
+  orderNumber: pt.number.isRequired,
 };
 
 export default OrderDetails;
