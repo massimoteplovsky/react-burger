@@ -1,0 +1,20 @@
+.ingredientsList {
+  display: flex;
+  align-items: center;
+  flex-flow: column;
+  gap: 16px;
+  max-height: 465px;
+  overflow-y: auto;
+}
+
+.ingredientsList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ingredientsList::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.ingredientsList::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}

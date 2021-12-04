@@ -1,7 +1,10 @@
-import { PropValidator } from '../../utils/prop-validator';
+import { useSelector } from 'react-redux';
+import { getIngredient } from '../../services/ducks/ingredient';
 import s from './ingredient-details.module.css';
 
-const IngredientDetails = ({ ingredient }) => {
+const IngredientDetails = () => {
+  const { ingredient } = useSelector(getIngredient);
+
   const {
     image_large,
     name,
@@ -44,10 +47,6 @@ const IngredientDetails = ({ ingredient }) => {
       </section>
     </div>
   );
-};
-
-IngredientDetails.propTypes = {
-  ingredient: PropValidator.INGREDIENT.isRequired,
 };
 
 export default IngredientDetails;

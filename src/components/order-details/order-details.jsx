@@ -1,8 +1,11 @@
-import pt from 'prop-types';
+import { useSelector } from 'react-redux';
 import OrderAccepted from '../../images/done.gif';
 import s from './order-details.module.css';
+import { getOrderState } from '../../services/ducks/order';
 
-const OrderDetails = ({ orderNumber }) => {
+const OrderDetails = () => {
+  const { orderNumber } = useSelector(getOrderState);
+
   return (
     <div className={s.container}>
       <h2 className="text text_type_digits-large mb-8">{orderNumber}</h2>
@@ -16,10 +19,6 @@ const OrderDetails = ({ orderNumber }) => {
       </p>
     </div>
   );
-};
-
-OrderDetails.propTypes = {
-  orderNumber: pt.number.isRequired,
 };
 
 export default OrderDetails;

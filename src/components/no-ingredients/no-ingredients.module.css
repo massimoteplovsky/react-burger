@@ -1,0 +1,16 @@
+.noIngredientsBlock {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.noIngredientsBlock svg {
+  width: 30%;
+  height: 30%;
+  margin-bottom: 25px;
+}

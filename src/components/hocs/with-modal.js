@@ -1,7 +1,9 @@
-import { useContext } from 'react';
+import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import pt from 'prop-types';
 import { ModalType } from '../../utils/constants';
-import { AppContext } from '../../services/app-context';
-import { CLOSE_MODAL } from '../../services/modules/app';
+import { setIngredient } from '../../services/ducks/ingredient';
+import { getAppState, closeModal } from '../../services/ducks/app';
 
 // Components
 import Modal from '../modal/modal';
@@ -10,20 +12,22 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 
 const withModal = (WrappedComponent) => {
   const WithModal = (props) => {
-    const { modalType, orderNumber, ingredient, dispatch } = useContext(
-      AppContext
-    );
+    const dispatch = useDispatch();
+    const { isModalOpen, modalType } = useSelector(getAppState);
 
-    const handleCloseModal = () => {
-      dispatch({ type: CLOSE_MODAL });
-    };
+    const handleCloseModal = useCallback(() => {
+      dispatch(closeModal());
+      if (modalType === ModalType.INGREDIENT) {
+        dispatch(setIngredient(null));
+      }
+    }, [modalType, dispatch]);
 
     const getComponent = () => {
       switch (modalType) {
         case ModalType.ORDER:
-          return <OrderDetails orderNumber={orderNumber} />;
+          return <OrderDetails />;
         case ModalType.INGREDIENT:
-          return <IngredientDetails ingredient={ingredient} />;
+          return <IngredientDetails />;
         default:
           return;
       }
@@ -32,7 +36,7 @@ const withModal = (WrappedComponent) => {
     return (
       <>
         <WrappedComponent {...props} />
-        {modalType && (
+        {isModalOpen && (
           <Modal
             isTitled={modalType === ModalType.INGREDIENT}
             handleCloseModal={handleCloseModal}
@@ -42,6 +46,10 @@ const withModal = (WrappedComponent) => {
         )}
       </>
     );
+  };
+
+  WithModal.propTypes = {
+    modalType: pt.string.isRequired,
   };
 
   return WithModal;

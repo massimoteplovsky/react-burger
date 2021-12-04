@@ -2,28 +2,3 @@
   max-width: 600px;
   width: 100%;
 }
-
-.tabsBlock {
-  display: flex;
-}
-
-.tabsBlock > div {
-  flex-grow: 1;
-}
-
-.ingredientsContainer {
-  max-height: 756px;
-  overflow-y: auto;
-}
-
-.ingredientsContainer::-webkit-scrollbar {
-  width: 8px;
-}
-
-.ingredientsContainer::-webkit-scrollbar-track {
-  background: #2f2f37;
-}
-
-.ingredientsContainer::-webkit-scrollbar-thumb {
-  background: #8585ad;
-}
