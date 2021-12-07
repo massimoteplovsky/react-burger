@@ -34,6 +34,7 @@ const reducer = createReducer(initialState, (builder) => {
       state.isLoading = false;
     })
     .addCase(fetchAllIngredients.rejected, (state) => {
+      state.ingredientsList = [];
       state.isLoading = false;
     })
     .addDefaultCase((state) => state);

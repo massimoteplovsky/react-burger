@@ -3,10 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import pt from 'prop-types';
 import { PropValidator } from '../../utils/prop-validator';
 import s from './ingredients-list.module.css';
-import { ModalType } from '../../utils/constants';
 import { getBurgerIgredientsIdsCount } from '../../services/ducks/burger-ingredients';
-import { setIngredient } from '../../services/ducks/ingredient';
-import { openModal } from '../../services/ducks/app';
+import { setCurrentIngredient } from '../../services/ducks/current-ingredient';
 
 // Components
 import IngredientItem from '../ingredient-item/ingredient-item';
@@ -17,8 +15,7 @@ const IngredientsList = forwardRef(({ title, ingredients }, ref) => {
 
   const handleClickIngredientItem = useCallback(
     (ingredient) => {
-      dispatch(setIngredient(ingredient));
-      dispatch(openModal(ModalType.INGREDIENT));
+      dispatch(setCurrentIngredient(ingredient));
     },
     [dispatch]
   );

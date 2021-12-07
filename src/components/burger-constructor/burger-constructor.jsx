@@ -6,16 +6,22 @@ import {
   getBurgerIngredients,
   getTotalPrice,
   addIngredient,
+  resetBurgerIngredients,
 } from '../../services/ducks/burger-ingredients';
-import { sendOrder, getOrderState } from '../../services/ducks/order';
-import { openModal } from '../../services/ducks/app';
-import { BunPosition, ModalType } from '../../utils/constants';
+import {
+  sendOrder,
+  resetOrder,
+  getOrderState,
+} from '../../services/ducks/order';
+import { BunPosition } from '../../utils/constants';
 
 // Components
 import BunIngredient from '../bun-ingredient/bun-ingredient';
 import MainIngredientsList from '../main-ingredients-list/main-ingredients-list';
 import SubmitSection from '../submit-section/submit-section';
 import NoIngredients from '../no-ingredients/no-ingredients';
+import Modal from '../modal/modal';
+import OrderDetails from '../order-details/order-details';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -29,16 +35,15 @@ const BurgerConstructor = () => {
     }),
   });
   const { bunIngredient, mainIngredients } = useSelector(getBurgerIngredients);
-  const { isLoading } = useSelector(getOrderState);
+  const { orderNumber, isLoading } = useSelector(getOrderState);
   const totalPrice = useSelector(getTotalPrice);
   const isIngredientsExist = bunIngredient || mainIngredients.length > 0;
 
   const handleSendOrder = useCallback(async () => {
-    const ingredientIds = [bunIngredient, ...mainIngredients].map(
+    const ingredientsIds = [bunIngredient, ...mainIngredients].map(
       ({ _id }) => _id
     );
-    await dispatch(sendOrder(ingredientIds));
-    dispatch(openModal(ModalType.ORDER));
+    await dispatch(sendOrder(ingredientsIds));
   }, [bunIngredient, mainIngredients, dispatch]);
 
   const handleDrop = useCallback(
@@ -47,6 +52,11 @@ const BurgerConstructor = () => {
     },
     [dispatch]
   );
+
+  const handleCloseModal = useCallback(() => {
+    dispatch(resetOrder());
+    dispatch(resetBurgerIngredients());
+  }, [dispatch]);
 
   return (
     <section
@@ -75,6 +85,11 @@ const BurgerConstructor = () => {
             isDisabled={!bunIngredient || isLoading}
             handleSendOrder={handleSendOrder}
           />
+          {orderNumber && (
+            <Modal isTitled={false} handleCloseModal={handleCloseModal}>
+              <OrderDetails orderNumber={orderNumber} />
+            </Modal>
+          )}
         </>
       )}
     </section>

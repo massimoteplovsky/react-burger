@@ -1,8 +1,3 @@
-export const ModalType = {
-  INGREDIENT: 'ingredient',
-  ORDER: 'order',
-};
-
 export const ApiRoute = {
   INGREDIENTS: 'ingredients',
   ORDERS: 'orders',
@@ -38,6 +33,6 @@ export const ActionPrefix = {
   APP: 'app',
   ORDER: 'app/order',
   INGREDIENTS: 'app/ingredients',
-  INGREDIENT: 'app/ingredient',
+  CURRENT_INGREDIENT: 'app/currentIngredient',
   BURGER_INGREDIENTS: 'app/burgerIngredients',
 };

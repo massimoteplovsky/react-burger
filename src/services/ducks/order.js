@@ -1,9 +1,15 @@
-import { createReducer, createAsyncThunk } from '@reduxjs/toolkit';
+import {
+  createReducer,
+  createAsyncThunk,
+  createAction,
+} from '@reduxjs/toolkit';
 import { ApiRoute } from '../../utils/constants';
 import { setError } from './app';
 import { ActionPrefix } from '../../utils/constants';
 
 // Actions
+export const resetOrder = createAction(`${ActionPrefix.ORDER}/resetOrder`);
+
 export const sendOrder = createAsyncThunk(
   `${ActionPrefix.ORDER}/sendOrder`,
   async (ingredientsIds, { dispatch, rejectWithValue, extra: request }) => {
@@ -38,8 +44,9 @@ const reducer = createReducer(initialState, (builder) => {
       state.orderNumber = payload;
       state.isLoading = false;
     })
-    .addCase(sendOrder.rejected, (state) => {
-      state.isLoading = false;
+    .addCase(sendOrder.rejected, () => initialState)
+    .addCase(resetOrder, (state) => {
+      state.orderNumber = null;
     })
     .addDefaultCase((state) => state);
 });

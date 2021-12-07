@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import s from './app.module.css';
-import { ModalType } from '../../utils/constants';
 import {
   getIngredientsState,
   fetchAllIngredients,
@@ -16,12 +15,6 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import Loader from '../loader/loader';
 import Error from '../error/error';
-
-// HOC
-import withModal from '../hocs/with-modal';
-
-const WithModalBurgerConstructor = withModal(BurgerConstructor);
-const WithModalBurgerIngredients = withModal(BurgerIngredients);
 
 const App = () => {
   const dispatch = useDispatch();
@@ -45,8 +38,8 @@ const App = () => {
       ) : (
         <main className={`${s.container} pb-10`}>
           <DndProvider backend={HTML5Backend}>
-            <WithModalBurgerIngredients modalType={ModalType.INGREDIENT} />
-            <WithModalBurgerConstructor modalType={ModalType.ORDER} />
+            <BurgerIngredients />
+            <BurgerConstructor />
           </DndProvider>
         </main>
       )}

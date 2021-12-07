@@ -12,6 +12,9 @@ export const removeIngredient = createAction(
 export const sortMainIngredients = createAction(
   `${ActionPrefix.BURGER_INGREDIENTS}/sortMainIngredients`
 );
+export const resetBurgerIngredients = createAction(
+  `${ActionPrefix.BURGER_INGREDIENTS}/resetBurgerIngredients`
+);
 
 // Reducer
 const initialState = {
@@ -44,6 +47,7 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(removeIngredient, (state, { payload: ingredientIndex }) => {
       state.burgerData.mainIngredients.splice(ingredientIndex, 1);
     })
+    .addCase(resetBurgerIngredients, () => initialState)
     .addDefaultCase((state) => state);
 });
 
