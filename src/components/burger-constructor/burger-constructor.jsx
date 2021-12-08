@@ -1,149 +1,95 @@
-import { useContext, useEffect } from 'react';
-import {
-  Button,
-  ConstructorElement,
-  CurrencyIcon,
-  DragIcon,
-  BurgerIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useDrop } from 'react-dnd';
 import s from './burger-constructor.module.css';
-import { AppContext } from '../../services/app-context';
-import { ENDPOINT, ApiRoute, ModalType } from '../../utils/constants';
 import {
-  SET_ORDER_NUMBER,
-  SEND_ORDER_ERROR,
-  DELETE_INGREDIENT,
-  SET_TOTAL_PRICE,
-} from '../../services/modules/app';
+  getBurgerIngredients,
+  getTotalPrice,
+  addIngredient,
+  resetBurgerIngredients,
+} from '../../services/ducks/burger-ingredients';
+import {
+  sendOrder,
+  resetOrder,
+  getOrderState,
+} from '../../services/ducks/order';
+import { BunPosition } from '../../utils/constants';
 
 // Components
-import NoIngredient from '../no-ingredient/no-ingredient';
+import BunIngredient from '../bun-ingredient/bun-ingredient';
+import MainIngredientsList from '../main-ingredients-list/main-ingredients-list';
+import SubmitSection from '../submit-section/submit-section';
+import NoIngredients from '../no-ingredients/no-ingredients';
+import Modal from '../modal/modal';
+import OrderDetails from '../order-details/order-details';
 
 const BurgerConstructor = () => {
-  const {
-    burgerData: { bunIngredient, mainIngredients },
-    totalPrice,
-    dispatch,
-  } = useContext(AppContext);
+  const dispatch = useDispatch();
+  const [{ isHover }, dropRef] = useDrop({
+    accept: 'ingredient',
+    drop(ingredient) {
+      handleDrop(ingredient);
+    },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+  });
+  const { bunIngredient, mainIngredients } = useSelector(getBurgerIngredients);
+  const { orderNumber, isLoading } = useSelector(getOrderState);
+  const totalPrice = useSelector(getTotalPrice);
   const isIngredientsExist = bunIngredient || mainIngredients.length > 0;
 
-  const handleSendOrder = async () => {
-    const ingredients = [bunIngredient, ...mainIngredients].map(
+  const handleSendOrder = useCallback(async () => {
+    const ingredientsIds = [bunIngredient, ...mainIngredients].map(
       ({ _id }) => _id
     );
-
-    try {
-      const response = await fetch(`${ENDPOINT}/${ApiRoute.ORDERS}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ingredients }),
-      });
-
-      if (response?.ok) {
-        const { order } = await response.json();
-        return dispatch({
-          type: SET_ORDER_NUMBER,
-          payload: { orderNumber: order.number, modalType: ModalType.ORDER },
-        });
-      }
-
-      throw new Error();
-    } catch (err) {
-      dispatch({
-        type: SEND_ORDER_ERROR,
-      });
-    }
-  };
-
-  const handleDeleteIngredient = (ingredientIndex) => {
-    const newMainIngredients = mainIngredients.filter(
-      (_, index) => index !== ingredientIndex
-    );
-    dispatch({ type: DELETE_INGREDIENT, payload: newMainIngredients });
-  };
-
-  useEffect(() => {
-    const bunPrice = bunIngredient?.price * 2 || 0;
-
-    const totalPrice =
-      mainIngredients.reduce(
-        (totalPrice, { price }) => (totalPrice += price),
-        0
-      ) + bunPrice;
-
-    dispatch({
-      type: SET_TOTAL_PRICE,
-      payload: totalPrice,
-    });
+    await dispatch(sendOrder(ingredientsIds));
   }, [bunIngredient, mainIngredients, dispatch]);
 
+  const handleDrop = useCallback(
+    (ingredient) => {
+      dispatch(addIngredient(ingredient));
+    },
+    [dispatch]
+  );
+
+  const handleCloseModal = useCallback(() => {
+    dispatch(resetOrder());
+    dispatch(resetBurgerIngredients());
+  }, [dispatch]);
+
   return (
-    <section className={`${s.burgerConstructorSection} mr-5 ml-5 pt-25`}>
+    <section
+      className={`${
+        isHover ? s.hoverBurgerConstructorSection : s.burgerConstructorSection
+      } mr-5 ml-5 mt-20`}
+      ref={dropRef}
+    >
       {!isIngredientsExist ? (
-        <div className={s.noIngredientsBlock}>
-          <BurgerIcon type="primary" />
-          <h2 className="text text_type_main-medium">
-            Выберите ингредиенты для вашего бургера
-          </h2>
-        </div>
+        <NoIngredients />
       ) : (
         <>
-          <div className={`${s.ingredientsContainer} mb-10`}>
-            {bunIngredient ? (
-              <ConstructorElement
-                type="top"
-                isLocked={true}
-                text={`${bunIngredient.name} (верх)`}
-                price={bunIngredient.price}
-                thumbnail={bunIngredient.image_mobile}
-              />
-            ) : (
-              <NoIngredient>Выберите булку (верх)</NoIngredient>
-            )}
-            <ul className={`${s.ingredientsList}`}>
-              {mainIngredients.length ? (
-                mainIngredients.map(({ name, price, image_mobile }, index) => (
-                  <li key={index} className={s.ingredientItem}>
-                    <DragIcon type="primary" />
-                    <ConstructorElement
-                      isLocked={false}
-                      text={name}
-                      price={price}
-                      thumbnail={image_mobile}
-                      handleClose={() => handleDeleteIngredient(index)}
-                    />
-                  </li>
-                ))
-              ) : (
-                <NoIngredient>Выберите основные ингредиенты</NoIngredient>
-              )}
-            </ul>
-            {bunIngredient ? (
-              <ConstructorElement
-                type="bottom"
-                isLocked={true}
-                text={`${bunIngredient.name} (низ)`}
-                price={bunIngredient.price}
-                thumbnail={bunIngredient.image_mobile}
-              />
-            ) : (
-              <NoIngredient>Выберите булку (низ)</NoIngredient>
-            )}
+          <div className={`${s.ingredientsContainer} mt-5 mb-10`}>
+            <BunIngredient
+              ingredient={bunIngredient}
+              position={BunPosition.TOP}
+            />
+            <MainIngredientsList ingredients={mainIngredients} />
+            <BunIngredient
+              ingredient={bunIngredient}
+              position={BunPosition.BOTTOM}
+            />
           </div>
-          <div className={s.submitSection}>
-            <p className={`${s.totalPrice} text text_type_digits-medium mr-10`}>
-              {totalPrice}&nbsp;
-              <CurrencyIcon clasName="text_type_main-large" type="primary" />
-            </p>
-            <Button
-              type="primary"
-              size="large"
-              disabled={!bunIngredient}
-              onClick={handleSendOrder}
-            >
-              Оформить заказ
-            </Button>
-          </div>
+          <SubmitSection
+            totalPrice={totalPrice}
+            isDisabled={!bunIngredient || isLoading}
+            handleSendOrder={handleSendOrder}
+          />
+          {orderNumber && (
+            <Modal isTitled={false} handleCloseModal={handleCloseModal}>
+              <OrderDetails orderNumber={orderNumber} />
+            </Modal>
+          )}
         </>
       )}
     </section>

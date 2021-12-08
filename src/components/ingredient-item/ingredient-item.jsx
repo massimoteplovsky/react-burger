@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import pt from 'prop-types';
+import { useDrag } from 'react-dnd';
 import {
   CurrencyIcon,
   Counter,
@@ -12,11 +13,19 @@ const IngredientItem = ({
   quantity,
   handleClickIngredientItem,
 }) => {
+  const [{ isDrag }, dragRef] = useDrag({
+    type: 'ingredient',
+    item: ingredient,
+    collect: (monitor) => ({
+      isDrag: monitor.isDragging(),
+    }),
+  });
   const { name, image, price } = ingredient;
 
   return (
     <li
-      className={s.ingredientItem}
+      ref={dragRef}
+      className={isDrag ? s.draggableIngredientItem : s.ingredientItem}
       onClick={() => handleClickIngredientItem(ingredient)}
     >
       <img className={s.image} src={image} alt={name} />

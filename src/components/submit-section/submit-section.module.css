@@ -1,0 +1,27 @@
+.submitSection {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 30px;
+}
+
+.submitSection button {
+  cursor: pointer;
+}
+
+.submitSection button:disabled {
+  box-shadow: none;
+  filter: none;
+  opacity: 0.2;
+  cursor: default;
+}
+
+.totalPrice {
+  display: flex;
+  align-items: center;
+}
+
+.totalPrice > svg {
+  width: 33px;
+  height: 33px;
+}

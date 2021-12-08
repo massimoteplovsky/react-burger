@@ -9,6 +9,11 @@
   transition: all 0.2s linear;
 }
 
+.draggableIngredientItem {
+  composes: ingredientItem;
+  opacity: 0.2;
+}
+
 .ingredientItem:hover {
   transform: scale(1.05);
 }

@@ -1,42 +1,47 @@
-import { memo } from 'react';
+import { useCallback, forwardRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import pt from 'prop-types';
 import { PropValidator } from '../../utils/prop-validator';
 import s from './ingredients-list.module.css';
+import { getBurgerIgredientsIdsCount } from '../../services/ducks/burger-ingredients';
+import { setCurrentIngredient } from '../../services/ducks/current-ingredient';
 
 // Components
 import IngredientItem from '../ingredient-item/ingredient-item';
 
-const IngredientsList = ({
-  title,
-  ingredients,
-  burgerIngredients,
-  handleClickIngredientItem,
-}) => {
-  const countIngredients = (id) =>
-    burgerIngredients.filter((ingredient) => ingredient._id === id).length;
+const IngredientsList = forwardRef(({ title, ingredients }, ref) => {
+  const burgerIngredientId = useSelector(getBurgerIgredientsIdsCount);
+  const dispatch = useDispatch();
+
+  const handleClickIngredientItem = useCallback(
+    (ingredient) => {
+      dispatch(setCurrentIngredient(ingredient));
+    },
+    [dispatch]
+  );
 
   return (
     <>
-      <h2 className="text text_type_main-medium">{title}</h2>
+      <h2 className="text text_type_main-medium" ref={ref}>
+        {title}
+      </h2>
       <ul className={`${s.ingredientList} pt-6 pr-4 pb-10 pl-4`}>
         {ingredients.map((ingredient) => (
           <IngredientItem
             key={ingredient._id}
             ingredient={ingredient}
-            quantity={countIngredients(ingredient._id)}
+            quantity={burgerIngredientId[ingredient._id] || 0}
             handleClickIngredientItem={handleClickIngredientItem}
           />
         ))}
       </ul>
     </>
   );
-};
+});
 
 IngredientsList.propTypes = {
   title: pt.string.isRequired,
   ingredients: pt.arrayOf(PropValidator.INGREDIENT.isRequired).isRequired,
-  burgerIngredients: pt.arrayOf(PropValidator.INGREDIENT).isRequired,
-  handleClickIngredientItem: pt.func.isRequired,
 };
 
-export default memo(IngredientsList);
+export default IngredientsList;
