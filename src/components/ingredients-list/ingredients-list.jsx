@@ -1,23 +1,28 @@
 import { useCallback, forwardRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useLocation, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import pt from 'prop-types';
 import { PropValidator } from '../../utils/prop-validator';
 import s from './ingredients-list.module.css';
 import { getBurgerIgredientsIdsCount } from '../../services/ducks/burger-ingredients';
-import { setCurrentIngredient } from '../../services/ducks/current-ingredient';
+import { RoutePath } from '../../utils/constants';
 
 // Components
 import IngredientItem from '../ingredient-item/ingredient-item';
 
 const IngredientsList = forwardRef(({ title, ingredients }, ref) => {
+  const history = useHistory();
+  const location = useLocation();
   const burgerIngredientId = useSelector(getBurgerIgredientsIdsCount);
-  const dispatch = useDispatch();
 
   const handleClickIngredientItem = useCallback(
     (ingredient) => {
-      dispatch(setCurrentIngredient(ingredient));
+      history.push({
+        pathname: RoutePath.INGREDIENT(ingredient._id),
+        state: { isModal: location, ingredient },
+      });
     },
-    [dispatch]
+    [history, location]
   );
 
   return (

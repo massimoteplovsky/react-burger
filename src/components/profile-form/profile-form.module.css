@@ -1,0 +1,45 @@
+.container {
+  width: 480px;
+  padding-top: 120px;
+}
+
+.section {
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.form > div {
+  margin-bottom: 24px;
+}
+
+.form > div,
+.form > div > div {
+  width: 100%;
+}
+
+.form button:disabled {
+  box-shadow: none;
+  filter: none;
+  opacity: 0.2;
+  cursor: default;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cancelBtn {
+  margin-right: 15px;
+  border: none;
+  background: none;
+  color: #4c4cff;
+}

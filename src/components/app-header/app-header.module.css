@@ -21,9 +21,22 @@
 .navItem {
   display: flex;
   align-items: center;
+  color: #8585ad;
+}
+
+.navItem > svg {
+  fill: #8585ad;
 }
 
 .navItem:last-child {
   flex-grow: 1;
   justify-content: flex-end;
+}
+
+.navItemActive {
+  color: #ffffff;
+}
+
+.navItemActive > svg {
+  fill: #ffffff;
 }

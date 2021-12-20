@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  padding: 0 20px;
+}
+
+.profileNav {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  margin-right: 60px;
+}
+
+.navItem,
+.navBtn {
+  padding: 15px 0;
+  color: #8585ad;
+}
+
+.navBtn {
+  border: none;
+  background: none;
+  text-align: left;
+}
+
+.navItemActive {
+  color: #ffffff;
+}

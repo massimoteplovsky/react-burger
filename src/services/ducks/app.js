@@ -10,8 +10,8 @@ const initialState = {
 };
 const appReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(setError, (state) => {
-      state.isError = true;
+    .addCase(setError, (state, { payload }) => {
+      state.isError = payload;
     })
     .addDefaultCase((state) => state);
 });

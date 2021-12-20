@@ -1,3 +1,5 @@
+import { memo } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import {
   Logo,
   BurgerIcon,
@@ -5,39 +7,47 @@ import {
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import s from './app-header.module.css';
+import { RoutePath } from '../../utils/constants';
 
 const AppHeader = () => {
   return (
     <header className={`${s.header} pt-4 pb-4`}>
       <nav className={s.mainNav}>
-        <a href="/" className={`${s.navItem} pt-4 pr-5 pb-4 pl-5 mr-2`}>
-          <BurgerIcon type="primary" />
-          <span className="text text_type_main-default ml-2">Конструктор</span>
-        </a>
-        <a
-          href="/"
-          className={`${s.navItem} pt-4 pr-5 pb-4 pl-5 text_color_inactive`}
+        <NavLink
+          to={RoutePath.HOME}
+          className={`${s.navItem} pt-4 pr-5 pb-4 pl-5 mr-2`}
+          activeClassName={s.navItemActive}
+          exact
         >
-          <ListIcon type="secondary" />
+          <BurgerIcon />
+          <span className="text text_type_main-default ml-2">Конструктор</span>
+        </NavLink>
+        <NavLink
+          to="/orders"
+          className={`${s.navItem} pt-4 pr-5 pb-4 pl-5`}
+          activeClassName={s.navItemActive}
+        >
+          <ListIcon />
           <span className="text text_type_main-default ml-2">
             Лента заказов
           </span>
-        </a>
-        <a href="/" className={s.logo}>
+        </NavLink>
+        <Link to={RoutePath.HOME} className={s.logo}>
           <Logo />
-        </a>
-        <a
-          href="/"
-          className={`${s.navItem} pt-4 pr-5 pb-4 pl-5 text_color_inactive`}
+        </Link>
+        <NavLink
+          to={RoutePath.PROFILE}
+          className={`${s.navItem} pt-4 pr-5 pb-4 pl-5`}
+          activeClassName={s.navItemActive}
         >
-          <ProfileIcon type="secondary" />
+          <ProfileIcon />
           <span className="text text_type_main-default ml-2">
             Личный кабинет
           </span>
-        </a>
+        </NavLink>
       </nav>
     </header>
   );
 };
 
-export default AppHeader;
+export default memo(AppHeader);

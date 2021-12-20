@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
 import s from './burger-constructor.module.css';
 import {
@@ -13,7 +14,7 @@ import {
   resetOrder,
   getOrderState,
 } from '../../services/ducks/order';
-import { BunPosition } from '../../utils/constants';
+import { BunPosition, RoutePath } from '../../utils/constants';
 
 // Components
 import BunIngredient from '../bun-ingredient/bun-ingredient';
@@ -22,9 +23,16 @@ import SubmitSection from '../submit-section/submit-section';
 import NoIngredients from '../no-ingredients/no-ingredients';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import { checkAuth } from '../../utils/helpers';
 
 const BurgerConstructor = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
+  const isAuth = checkAuth();
+  const { bunIngredient, mainIngredients } = useSelector(getBurgerIngredients);
+  const { orderNumber, isLoading } = useSelector(getOrderState);
+  const totalPrice = useSelector(getTotalPrice);
+  const isIngredientsExist = bunIngredient || mainIngredients.length > 0;
   const [{ isHover }, dropRef] = useDrop({
     accept: 'ingredient',
     drop(ingredient) {
@@ -34,17 +42,17 @@ const BurgerConstructor = () => {
       isHover: monitor.isOver(),
     }),
   });
-  const { bunIngredient, mainIngredients } = useSelector(getBurgerIngredients);
-  const { orderNumber, isLoading } = useSelector(getOrderState);
-  const totalPrice = useSelector(getTotalPrice);
-  const isIngredientsExist = bunIngredient || mainIngredients.length > 0;
 
   const handleSendOrder = useCallback(async () => {
+    if (!isAuth) {
+      return history.push({ pathname: RoutePath.LOGIN });
+    }
+
     const ingredientsIds = [bunIngredient, ...mainIngredients].map(
       ({ _id }) => _id
     );
     await dispatch(sendOrder(ingredientsIds));
-  }, [bunIngredient, mainIngredients, dispatch]);
+  }, [bunIngredient, mainIngredients, isAuth, dispatch, history]);
 
   const handleDrop = useCallback(
     (ingredient) => {
@@ -62,7 +70,7 @@ const BurgerConstructor = () => {
     <section
       className={`${
         isHover ? s.hoverBurgerConstructorSection : s.burgerConstructorSection
-      } mr-5 ml-5 mt-20`}
+      } mr-5 ml-5 mt-10`}
       ref={dropRef}
     >
       {!isIngredientsExist ? (
