@@ -4,7 +4,6 @@ import {
   createSelector,
 } from '@reduxjs/toolkit';
 import { ApiRoute } from '../../utils/constants';
-import { setError } from './app';
 import { ActionPrefix } from '../../utils/constants';
 
 // Actions
@@ -15,7 +14,6 @@ export const fetchAllIngredients = createAsyncThunk(
       const { data: ingredients } = await request(ApiRoute.INGREDIENTS);
       return ingredients;
     } catch {
-      dispatch(setError());
       return rejectWithValue();
     }
   }
@@ -42,7 +40,13 @@ const reducer = createReducer(initialState, (builder) => {
 
 // Selectors
 export const getIngredientsState = ({ ingredients }) => ingredients;
+
 const getAllIngredients = ({ ingredients }) => ingredients.ingredientsList;
+
+export const getIngredient =
+  (ingredientId) =>
+  ({ ingredients }) =>
+    ingredients.ingredientsList.find(({ _id }) => _id === ingredientId);
 
 export const getFilteredIngredients = createSelector(
   getAllIngredients,

@@ -1,6 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './ducks';
-import request from '../utils/api';
+import createRequest from '../utils/api';
+import { setError } from './ducks/app';
+
+const onRequestFail = () => {
+  store.dispatch(setError(true));
+};
+
+const request = createRequest(onRequestFail);
 
 export const store = configureStore({
   reducer: rootReducer,

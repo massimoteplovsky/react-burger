@@ -8,7 +8,7 @@ const NoIngredients = () => {
       <BurgerIcon type="primary" />
       <h2 className="text text_type_main-large mb-3">Собери свой бургер</h2>
       <p className="text text_type_main-medium">
-        Перетащите ингредиенты в конструктор
+        Перенесите ингредиенты в конструктор
       </p>
     </div>
   );
