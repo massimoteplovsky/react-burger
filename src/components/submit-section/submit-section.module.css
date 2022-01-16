@@ -19,6 +19,7 @@
 .totalPrice {
   display: flex;
   align-items: center;
+  margin-right: 40px;
 }
 
 .totalPrice > svg {

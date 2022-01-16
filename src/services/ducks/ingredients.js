@@ -5,15 +5,17 @@ import {
 } from '@reduxjs/toolkit';
 import { ApiRoute } from '../../utils/constants';
 import { ActionPrefix } from '../../utils/constants';
+import { setError } from './app';
 
 // Actions
 export const fetchAllIngredients = createAsyncThunk(
   `${ActionPrefix.INGREDIENTS}/fetchAllIngredients`,
-  async (_, { dispatch, rejectWithValue, extra: request }) => {
+  async (_, { rejectWithValue, dispatch, extra: request }) => {
     try {
       const { data: ingredients } = await request(ApiRoute.INGREDIENTS);
       return ingredients;
     } catch {
+      dispatch(setError(true));
       return rejectWithValue();
     }
   }

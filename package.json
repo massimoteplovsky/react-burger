@@ -12,6 +12,7 @@
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@ya.praktikum/react-developer-burger-ui-components": "^1.12.0",
+    "classnames": "^2.3.1",
     "react": "^17.0.2",
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^14.0.2",
@@ -31,14 +32,21 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "plugins": [
+      "@typescript-eslint"
     ],
     "rules": {
       "no-console": "warn",
-      "react/prop-types": "error",
-      "no-useless-escape": "off"
+      "no-useless-escape": "off",
+      "@typescript-eslint/ban-ts-comment": "off"
     }
   },
   "browserslist": {
@@ -52,5 +60,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-router-dom": "^5.3.2",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1"
   }
 }

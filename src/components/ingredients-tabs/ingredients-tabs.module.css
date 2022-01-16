@@ -1,5 +1,6 @@
 .tabsBlock {
   display: flex;
+  margin-bottom: 40px;
 }
 
 .tabsBlock > div {
