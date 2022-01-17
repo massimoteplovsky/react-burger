@@ -4,8 +4,8 @@ import {
   createAction,
 } from '@reduxjs/toolkit';
 import { ApiRoute } from '../../utils/constants';
-import { ActionPrefix, Token, TOKEN_ERROR_TYPES } from '../../utils/constants';
-import { deleteCookie, getCookie, setCookie } from '../../utils/helpers';
+import { ActionPrefix, Token } from '../../utils/constants';
+import { getToken, deleteToken, setToken } from '../../utils/helpers';
 
 // Actions
 export const resetStatus = createAction(`${ActionPrefix.USER}/resetStatus`);
@@ -20,8 +20,8 @@ export const registerUser = createAsyncThunk(
         body: JSON.stringify(formData),
       });
       const { accessToken, refreshToken, user } = data;
-      setCookie(Token.ACCESS_TOKEN, accessToken);
-      setCookie(Token.REFRESH_TOKEN, refreshToken);
+      setToken(Token.ACCESS_TOKEN, accessToken);
+      setToken(Token.REFRESH_TOKEN, refreshToken);
       return user;
     } catch {
       return rejectWithValue();
@@ -39,8 +39,8 @@ export const loginUser = createAsyncThunk(
         body: JSON.stringify(formData),
       });
       const { accessToken, refreshToken, user } = data;
-      setCookie(Token.ACCESS_TOKEN, accessToken);
-      setCookie(Token.REFRESH_TOKEN, refreshToken);
+      setToken(Token.ACCESS_TOKEN, accessToken);
+      setToken(Token.REFRESH_TOKEN, refreshToken);
       return user;
     } catch {
       return rejectWithValue();
@@ -81,15 +81,15 @@ export const resetPassword = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
   `${ActionPrefix.USER}/logoutUser`,
   async (_, { rejectWithValue, extra: request }) => {
-    const refreshToken = getCookie(Token.REFRESH_TOKEN);
+    const refreshToken = getToken(Token.REFRESH_TOKEN);
     try {
       await request(ApiRoute.AUTH_LOGOUT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: refreshToken }),
       });
-      deleteCookie(Token.REFRESH_TOKEN);
-      deleteCookie(Token.ACCESS_TOKEN);
+      deleteToken(Token.REFRESH_TOKEN);
+      deleteToken(Token.ACCESS_TOKEN);
     } catch {
       return rejectWithValue();
     }
@@ -99,19 +99,19 @@ export const logoutUser = createAsyncThunk(
 export const refreshUserToken = createAsyncThunk(
   `${ActionPrefix.USER}/refreshUserToken`,
   async (asyncAction, { rejectWithValue, dispatch, extra: request }) => {
-    const token = getCookie(Token.REFRESH_TOKEN);
+    const token = getToken(Token.REFRESH_TOKEN);
     try {
       const { accessToken, refreshToken } = await request(ApiRoute.AUTH_TOKEN, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ token: token }),
       });
-      setCookie(Token.REFRESH_TOKEN, refreshToken);
-      setCookie(Token.ACCESS_TOKEN, accessToken);
+      setToken(Token.ACCESS_TOKEN, accessToken);
+      setToken(Token.REFRESH_TOKEN, refreshToken);
       await dispatch(asyncAction());
     } catch (err) {
-      deleteCookie(Token.REFRESH_TOKEN);
-      deleteCookie(Token.ACCESS_TOKEN);
+      deleteToken(Token.ACCESS_TOKEN);
+      deleteToken(Token.REFRESH_TOKEN);
       return rejectWithValue();
     }
   }
@@ -120,18 +120,19 @@ export const refreshUserToken = createAsyncThunk(
 export const fetchUserData = createAsyncThunk(
   `${ActionPrefix.USER}/fetchUserData`,
   async (_, { rejectWithValue, dispatch, extra: request }) => {
-    const accessToken = getCookie(Token.ACCESS_TOKEN);
+    const accessToken = getToken(Token.ACCESS_TOKEN);
+
     try {
       const { user } = await request(ApiRoute.AUTH_USER, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: accessToken,
+          Authorization: `${accessToken}`,
         },
       });
       return user;
     } catch (err) {
-      if (TOKEN_ERROR_TYPES.includes(err.message)) {
+      if (err.message) {
         dispatch(refreshUserToken(fetchUserData));
         return rejectWithValue();
       }
@@ -143,7 +144,7 @@ export const fetchUserData = createAsyncThunk(
 export const updateUserData = createAsyncThunk(
   `${ActionPrefix.USER}/updateUserData`,
   async (formData, { rejectWithValue, dispatch, extra: request }) => {
-    const accessToken = getCookie(Token.ACCESS_TOKEN);
+    const accessToken = getToken(Token.ACCESS_TOKEN);
     try {
       const { user } = await request(ApiRoute.AUTH_USER, {
         method: 'PATCH',
@@ -155,7 +156,7 @@ export const updateUserData = createAsyncThunk(
       });
       return user;
     } catch (err) {
-      if (TOKEN_ERROR_TYPES.includes(err.message)) {
+      if (err.message) {
         dispatch(refreshUserToken(() => updateUserData(formData)));
         return rejectWithValue();
       }

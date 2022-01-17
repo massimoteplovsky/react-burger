@@ -10,7 +10,6 @@
 }
 
 .draggableIngredientItem {
-  composes: ingredientItem;
   opacity: 0.2;
 }
 
@@ -25,6 +24,7 @@
 .price {
   display: flex;
   align-items: center;
+  margin: 4px 0;
 }
 
 .name {

@@ -8,6 +8,7 @@
   flex-direction: column;
   width: 320px;
   margin-right: 60px;
+  padding-top: 120px;
 }
 
 .navItem,
@@ -17,6 +18,7 @@
 }
 
 .navBtn {
+  margin-bottom: 80px;
   border: none;
   background: none;
   text-align: left;
@@ -24,4 +26,9 @@
 
 .navItemActive {
   color: #ffffff;
+}
+
+.content {
+  padding: 40px 0;
+  flex-grow: 1;
 }

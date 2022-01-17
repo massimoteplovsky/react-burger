@@ -5,8 +5,8 @@ import {
 } from '@reduxjs/toolkit';
 import { ApiRoute, Token } from '../../utils/constants';
 import { refreshUserToken } from './user';
-import { ActionPrefix, TOKEN_ERROR_TYPES } from '../../utils/constants';
-import { getCookie } from '../../utils/helpers';
+import { ActionPrefix } from '../../utils/constants';
+import { getToken } from '../../utils/helpers';
 
 // Actions
 export const resetOrder = createAction(`${ActionPrefix.ORDER}/resetOrder`);
@@ -14,7 +14,7 @@ export const resetOrder = createAction(`${ActionPrefix.ORDER}/resetOrder`);
 export const sendOrder = createAsyncThunk(
   `${ActionPrefix.ORDER}/sendOrder`,
   async (ingredientsIds, { dispatch, rejectWithValue, extra: request }) => {
-    const accessToken = getCookie(Token.ACCESS_TOKEN);
+    const accessToken = getToken(Token.ACCESS_TOKEN);
     try {
       const {
         order: { number },
@@ -28,7 +28,7 @@ export const sendOrder = createAsyncThunk(
       });
       return number;
     } catch (err) {
-      if (TOKEN_ERROR_TYPES.includes(err.message)) {
+      if (err.message) {
         dispatch(refreshUserToken(() => sendOrder(ingredientsIds)));
         return rejectWithValue();
       }
