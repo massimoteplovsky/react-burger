@@ -6,6 +6,7 @@
 .profileNav {
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   width: 320px;
   margin-right: 60px;
   padding-top: 120px;

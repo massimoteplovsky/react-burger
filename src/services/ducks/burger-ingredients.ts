@@ -1,15 +1,29 @@
 import { createReducer, createAction, createSelector } from '@reduxjs/toolkit';
 import { IngredientType } from '../../utils/constants';
 import { ActionPrefix } from '../../utils/constants';
+import { RootState } from '../store';
+import { TIngredients, TIngredient } from '../../utils/prop-validator';
+
+interface IBurgerIngredientsState {
+  burgerData: {
+    bunIngredient: TIngredient | null;
+    mainIngredients: TIngredients;
+  };
+}
+
+type TSortIngredients = {
+  startIndex: number;
+  moveToIndex: number;
+};
 
 // Actions
-export const addIngredient = createAction(
+export const addIngredient = createAction<TIngredient>(
   `${ActionPrefix.BURGER_INGREDIENTS}/addIngredient`
 );
-export const removeIngredient = createAction(
+export const removeIngredient = createAction<number>(
   `${ActionPrefix.BURGER_INGREDIENTS}/removeIngredient`
 );
-export const sortMainIngredients = createAction(
+export const sortMainIngredients = createAction<TSortIngredients>(
   `${ActionPrefix.BURGER_INGREDIENTS}/sortMainIngredients`
 );
 export const resetBurgerIngredients = createAction(
@@ -17,7 +31,7 @@ export const resetBurgerIngredients = createAction(
 );
 
 // Reducer
-const initialState = {
+const initialState: IBurgerIngredientsState = {
   burgerData: {
     bunIngredient: null,
     mainIngredients: [],
@@ -52,12 +66,14 @@ const reducer = createReducer(initialState, (builder) => {
 });
 
 // Selectors
-export const getBurgerIngredients = ({ burgerIngredients }) =>
+export const getBurgerIngredients = ({
+  burgerIngredients,
+}: RootState): { bunIngredient: TIngredient; mainIngredients: TIngredients } =>
   burgerIngredients.burgerData;
 
 export const getTotalPrice = createSelector(
   getBurgerIngredients,
-  (burgerIngredients) => {
+  (burgerIngredients): number => {
     const { bunIngredient, mainIngredients } = burgerIngredients;
     const bunPrice = bunIngredient?.price * 2 || 0;
 
@@ -79,7 +95,7 @@ export const getBurgerIgredientsIdsCount = createSelector(
       ? [bunIngredient, ...mainIngredients]
       : mainIngredients;
 
-    return ingredients.reduce((acc, { _id }) => {
+    return ingredients.reduce<Record<string, number>>((acc, { _id }) => {
       !acc[_id] ? (acc[_id] = 1) : (acc[_id] += 1);
       return acc;
     }, {});

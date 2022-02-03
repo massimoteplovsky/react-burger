@@ -23,7 +23,7 @@ const AppHeader: FC = () => {
           <span className="text text_type_main-default ml-2">Конструктор</span>
         </NavLink>
         <NavLink
-          to="/orders"
+          to={RoutePath.FEED}
           className={s.navItem}
           activeClassName={s.navItemActive}
         >

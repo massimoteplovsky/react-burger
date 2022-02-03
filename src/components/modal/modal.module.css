@@ -1,6 +1,7 @@
 .modal {
   max-width: 720px;
   width: 100%;
+  margin: 7% auto;
   background-color: #1c1c21;
   border-radius: 40px;
 }

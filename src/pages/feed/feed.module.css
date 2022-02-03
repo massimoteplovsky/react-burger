@@ -1,0 +1,28 @@
+.container {
+  padding: 40px 20px;
+}
+
+.content {
+  display: flex;
+}
+
+.dashboard {
+  max-width: 580px;
+  width: 100%;
+  margin-left: 60px;
+}
+
+.statusContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 60px;
+}
+
+.statusBlock {
+  width: 275px;
+}
+
+.orders {
+  display: flex;
+  justify-content: space-between;
+}

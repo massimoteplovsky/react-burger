@@ -1,0 +1,7 @@
+.orderContainer {
+  padding: 120px 0;
+}
+
+.orderContainer > h2 {
+  text-align: center;
+}

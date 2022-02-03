@@ -15,6 +15,18 @@ export enum Token {
   REFRESH_TOKEN = 'refreshToken',
 }
 
+export enum OrderStatus {
+  done = 'done',
+  pending = 'pending',
+  created = 'created',
+  inProgress = 'inProgress',
+}
+
+export enum OrderType {
+  ALL_ORDERS = 'allOrders',
+  USER_ORDERS = 'userOrders',
+}
+
 export const TOKEN_ERROR_TYPES = ['jwt expired', 'invalid token'];
 
 export enum BunPosition {
@@ -46,6 +58,7 @@ export const TAB_ITEMS = [
 export enum ActionPrefix {
   APP = 'app',
   ORDER = 'app/order',
+  ORDERS = 'app/orders',
   USER = 'app/user',
   INGREDIENTS = 'app/ingredients',
   CURRENT_INGREDIENT = 'app/currentIngredient',
@@ -58,7 +71,10 @@ export const RoutePath = {
   REGISTRATION: '/register',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
+  FEED: '/feed',
+  FEED_ID: (id: string): string => `/feed/${id}`,
   PROFILE: '/profile',
   PROFILE_ORDERS: '/profile/orders',
+  PROFILE_ORDERS_ID: (id: string): string => `/profile/orders/${id}`,
   INGREDIENT: (id: string): string => `/ingredients/${id}`,
 };

@@ -1,5 +1,5 @@
 import { useEffect, useCallback, FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../services/hooks';
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,6 +13,7 @@ import {
 } from '../../services/ducks/ingredients';
 import { getAppState } from '../../services/ducks/app';
 import { RoutePath } from '../../utils/constants';
+import { TIngredient, TOrderPopulated } from '../../utils/prop-validator';
 
 // Components
 import Layout from '../layout/layout';
@@ -20,6 +21,7 @@ import Loader from '../loader/loader';
 import Error from '../error/error';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import OrderInfo from '../order-info/order-info';
 import ProtectedRoute from '../protected-route/protected-route';
 
 // Pages
@@ -31,7 +33,8 @@ import Ingredient from '../../pages/ingredient/ingredient';
 import ForgotPassword from '../../pages/forgot-password/forgot-password';
 import ResetPassword from '../../pages/reset-password/reset-password';
 import NotFound from '../../pages/not-found/not-found';
-import { TIngredient } from '../../utils/prop-validator';
+import Feed from '../../pages/feed/feed';
+import Order from '../../pages/order/order';
 
 type TLocationItem = {
   hash: string;
@@ -44,16 +47,18 @@ type TLocationItem = {
 type TLocationState = {
   modalLocation: TLocationItem;
   currentIngredient: TIngredient;
+  currentOrder: TOrderPopulated;
 };
 
 const App: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
   const location = useLocation<TLocationState>();
   const modalLocation = location.state?.modalLocation;
   const currentIngredient = location.state?.currentIngredient;
-  const { isLoading } = useSelector(getIngredientsState);
-  const { isError } = useSelector(getAppState);
+  const currentOrder = location.state?.currentOrder;
+  const { isLoading } = useAppSelector(getIngredientsState);
+  const { isError } = useAppSelector(getAppState);
 
   useEffect(() => {
     const fetchIngredients = async () => {
@@ -102,6 +107,15 @@ const App: FC = () => {
         >
           <Profile />
         </ProtectedRoute>
+        <ProtectedRoute path={RoutePath.PROFILE_ORDERS_ID(':id')} exact>
+          <Order />
+        </ProtectedRoute>
+        <Route path={RoutePath.FEED} exact>
+          <Feed />
+        </Route>
+        <Route path={RoutePath.FEED_ID(':id')} exact>
+          <Order />
+        </Route>
         <Route path={RoutePath.INGREDIENT(':id')}>
           <Ingredient />
         </Route>
@@ -111,8 +125,27 @@ const App: FC = () => {
       </Switch>
       {modalLocation && (
         <Route path={RoutePath.INGREDIENT(':id')}>
-          <Modal isTitled handleCloseModal={handleCloseModal}>
+          <Modal
+            title="Детали ингредиента"
+            isTitled
+            titleClasses="text text_type_main-large"
+            handleCloseModal={handleCloseModal}
+          >
             <IngredientDetails ingredient={currentIngredient} />
+          </Modal>
+        </Route>
+      )}
+      {modalLocation && (
+        <Route
+          path={[RoutePath.FEED_ID(':id'), RoutePath.PROFILE_ORDERS_ID(':id')]}
+        >
+          <Modal
+            title={`#${currentOrder?.number}`}
+            titleClasses="text text_type_digits-default mb-10"
+            isTitled
+            handleCloseModal={handleCloseModal}
+          >
+            <OrderInfo order={currentOrder} />
           </Modal>
         </Route>
       )}
