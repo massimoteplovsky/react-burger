@@ -7,7 +7,7 @@ import {
   useLocation,
   useHistory,
 } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../services/hooks';
 import cn from 'classnames';
 import s from './profile.module.css';
 import {
@@ -16,11 +16,14 @@ import {
   fetchUserData,
   resetStatus,
 } from '../../services/ducks/user';
+import { getAllOrders } from '../../services/ducks/orders';
 import { RoutePath } from '../../utils/constants';
 
 // Components
 import ProfileForm from '../../components/profile-form/profile-form';
+import OrdersList from '../../components/orders-list/orders-list';
 import Loader from '../../components/loader/loader';
+import { wsAction } from '../../services/ducks/orders';
 
 const Note = {
   [RoutePath.PROFILE]:
@@ -30,10 +33,11 @@ const Note = {
 };
 
 const Profile: FC = () => {
+  const dispatch = useAppDispatch();
   const history = useHistory();
   const location = useLocation();
-  const { success, isError } = useSelector(getUserState);
-  const dispatch = useDispatch();
+  const { success, isError } = useAppSelector(getUserState);
+  const ordersData = useAppSelector(getAllOrders);
 
   const handleLogout = async () => {
     await dispatch(logoutUser());
@@ -50,6 +54,7 @@ const Profile: FC = () => {
   useEffect(() => {
     return () => {
       dispatch(resetStatus());
+      dispatch(wsAction.onClose());
     };
   }, [dispatch]);
 
@@ -57,7 +62,7 @@ const Profile: FC = () => {
     return <Redirect to={{ pathname: RoutePath.LOGIN }} />;
   }
 
-  if (!success) return <Loader />;
+  if (!success || !ordersData) return <Loader />;
 
   return (
     <div className={s.container}>
@@ -93,7 +98,7 @@ const Profile: FC = () => {
             <ProfileForm />
           </Route>
           <Route path={RoutePath.PROFILE_ORDERS} exact>
-            Profile Orders
+            <OrdersList orders={ordersData.orders} isShownOrderStatus />
           </Route>
         </Switch>
       </div>

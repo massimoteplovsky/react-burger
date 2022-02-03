@@ -1,0 +1,114 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.orderBlock {
+  max-width: 640px;
+  width: 100%;
+}
+
+.number {
+  text-align: center;
+}
+
+.readyStatus {
+  color: #00cccc;
+}
+
+.ingredientsBlock {
+  margin-bottom: 40px;
+}
+
+.ingredientsList {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 310px;
+  overflow-y: auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.ingredientsList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ingredientsList::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.ingredientsList::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+
+.ingredient {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 62px;
+  padding-left: 80px;
+}
+
+.image {
+  position: absolute;
+  left: -29px;
+}
+
+.image::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  display: block;
+  width: 64px;
+  height: 64px;
+  border: 2px solid transparent;
+  border-radius: 50px;
+  background: linear-gradient(#1c1c21, #1c1c21) padding-box,
+    linear-gradient(100deg, #801ab2, #4c4cff) border-box;
+  content: '';
+}
+
+.image img {
+  position: relative;
+  width: 122px;
+  height: 56px;
+  z-index: 10;
+}
+
+.name {
+  flex-grow: 1;
+  margin-right: 16px;
+  line-height: 24px;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.quantity > svg {
+  margin-left: 10px;
+}
+
+.orderInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalPrice {
+  display: flex;
+  align-items: center;
+}
+
+.totalPrice > svg {
+  margin-left: 10px;
+}
+
+.readyStatus {
+  color: #00cccc;
+}

@@ -8,12 +8,16 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 
 type TComponentProps = {
-  isTitled: boolean;
+  title?: string;
+  isTitled?: boolean;
+  titleClasses?: string;
   handleCloseModal: () => void;
 };
 
 const Modal: FC<TComponentProps> = ({
+  title,
   isTitled,
+  titleClasses,
   handleCloseModal,
   children,
 }) => {
@@ -45,8 +49,8 @@ const Modal: FC<TComponentProps> = ({
             className={isTitled ? s.modalContainer : s.modalContainerNoTitle}
           >
             {isTitled ? (
-              <h2 className={cn(s.modalTitle, 'text', 'text_type_main-large')}>
-                Детали ингредиента
+              <h2 className={cn(s.modalTitle, titleClasses)}>
+                {title}
                 <CloseIcon type="primary" onClick={handleCloseModal} />
               </h2>
             ) : (

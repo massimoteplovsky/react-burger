@@ -39,7 +39,6 @@ const MainIngredient: FC<TComponentProps> = ({
     accept: 'main-ingredient',
     drop() {
       dispatch(
-        // @ts-ignore
         sortMainIngredients({
           startIndex: draggingItem.draggingItemIndex,
           moveToIndex: ingredientIndex,
@@ -59,7 +58,6 @@ const MainIngredient: FC<TComponentProps> = ({
   }, [dragRef, dropRef]);
 
   const handleDeleteIngredient = (ingredientIndex: number): void => {
-    // @ts-ignore
     dispatch(removeIngredient(ingredientIndex));
   };
 

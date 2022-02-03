@@ -1,11 +1,22 @@
 .modalOverlay {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100%;
   position: fixed;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 60%);
+  z-index: 9999;
+  overflow: auto;
+}
+
+.modalOverlay::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modalOverlay::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.modalOverlay::-webkit-scrollbar-thumb {
+  background: #8585ad;
 }

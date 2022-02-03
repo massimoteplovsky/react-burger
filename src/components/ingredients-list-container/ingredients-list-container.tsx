@@ -8,7 +8,6 @@ import {
   RefObject,
 } from 'react';
 import { useSelector } from 'react-redux';
-import pt from 'prop-types';
 import s from './ingredients-list-container.module.css';
 import { TAB_ITEMS } from '../../utils/constants';
 import { getFilteredIngredients } from '../../services/ducks/ingredients';
@@ -21,6 +20,11 @@ type TComponentProps = {
   activeTab: string;
   setIsScrollMethod: (IsScrollMethod: boolean) => void;
   setActiveTab: (activeTab: string) => void;
+};
+
+type TScrollElement = {
+  type: string;
+  distance: number;
 };
 
 type TRefKeys = {
@@ -45,18 +49,19 @@ const IngredientsListContainer: FC<TComponentProps> = ({
   }, []);
 
   const handleScroll = () => {
-    const [nearestTitle] = TAB_ITEMS.reduce<
-      Array<{ type: string; distance: number }>
-    >((acc, { type }) => {
-      acc.push({
-        type,
-        distance: Math.abs(
-          containerRef.current.getBoundingClientRect().top -
-            ingredientsTitleRef[type].current.getBoundingClientRect().top
-        ),
-      });
-      return acc;
-    }, []).sort((a, b) => a.distance - b.distance);
+    const [nearestTitle] = TAB_ITEMS.reduce<TScrollElement[]>(
+      (acc, { type }) => {
+        acc.push({
+          type,
+          distance: Math.abs(
+            containerRef.current.getBoundingClientRect().top -
+              ingredientsTitleRef[type].current.getBoundingClientRect().top
+          ),
+        });
+        return acc;
+      },
+      []
+    ).sort((a, b) => a.distance - b.distance);
 
     if (activeTab !== nearestTitle.type) {
       setActiveTab(nearestTitle.type);
@@ -90,12 +95,6 @@ const IngredientsListContainer: FC<TComponentProps> = ({
       )}
     </div>
   );
-};
-IngredientsListContainer.propTypes = {
-  isScrollMethod: pt.bool.isRequired,
-  activeTab: pt.string.isRequired,
-  setIsScrollMethod: pt.func.isRequired,
-  setActiveTab: pt.func.isRequired,
 };
 
 export default IngredientsListContainer;

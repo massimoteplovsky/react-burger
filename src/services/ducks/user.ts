@@ -3,16 +3,62 @@ import {
   createAsyncThunk,
   createAction,
 } from '@reduxjs/toolkit';
-import { ApiRoute } from '../../utils/constants';
-import { ActionPrefix, Token } from '../../utils/constants';
+import { ApiRoute, ActionPrefix, Token } from '../../utils/constants';
 import { getToken, deleteToken, setToken } from '../../utils/helpers';
+import { RootState, AppDispatch } from '../store';
+import { wsAction } from './orders';
+import { TApiOptions } from '../../utils/prop-validator';
+
+interface IUserState {
+  userData: {
+    name: string;
+    email: string;
+  } | null;
+  isLoading: boolean;
+  isError: boolean;
+  success: boolean;
+}
+
+type TFormData = {
+  name?: string;
+  email?: string;
+  password?: string;
+  token?: string;
+};
+
+type TUserDataResponse = {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+  user: {
+    email: string;
+    name: string;
+  };
+};
+
+type TUserData = {
+  email: string;
+  name: string;
+};
 
 // Actions
 export const resetStatus = createAction(`${ActionPrefix.USER}/resetStatus`);
 
-export const registerUser = createAsyncThunk(
+export const registerUser = createAsyncThunk<
+  TUserData,
+  TFormData,
+  {
+    rejectValue: void;
+    extra: {
+      request: (
+        enpoint: string,
+        options: TApiOptions
+      ) => Promise<TUserDataResponse>;
+    };
+  }
+>(
   `${ActionPrefix.USER}/registerUser`,
-  async (formData, { rejectWithValue, extra: request }) => {
+  async (formData, { rejectWithValue, extra: { request } }) => {
     try {
       const data = await request(ApiRoute.AUTH_REGISTRATION, {
         method: 'POST',
@@ -29,9 +75,21 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const loginUser = createAsyncThunk(
+export const loginUser = createAsyncThunk<
+  TUserData,
+  TFormData,
+  {
+    rejectValue: void;
+    extra: {
+      request: (
+        enpoint: string,
+        options: TApiOptions
+      ) => Promise<TUserDataResponse>;
+    };
+  }
+>(
   `${ActionPrefix.USER}/loginUser`,
-  async (formData, { rejectWithValue, extra: request }) => {
+  async (formData, { rejectWithValue, extra: { request } }) => {
     try {
       const data = await request(ApiRoute.AUTH_LOGIN, {
         method: 'POST',
@@ -48,11 +106,20 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const sendUserEmailToResetPassword = createAsyncThunk(
+export const sendUserEmailToResetPassword = createAsyncThunk<
+  void,
+  TFormData,
+  {
+    rejectValue: void;
+    extra: {
+      request: (enpoint: string, options: TApiOptions) => void;
+    };
+  }
+>(
   `${ActionPrefix.USER}/sendUserEmailToResetPassword`,
-  async (formData, { rejectWithValue, extra: request }) => {
+  async (formData, { rejectWithValue, extra: { request } }) => {
     try {
-      return await request(ApiRoute.PASSWORD_RESET, {
+      await request(ApiRoute.PASSWORD_RESET, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -63,11 +130,20 @@ export const sendUserEmailToResetPassword = createAsyncThunk(
   }
 );
 
-export const resetPassword = createAsyncThunk(
+export const resetPassword = createAsyncThunk<
+  void,
+  TFormData,
+  {
+    rejectValue: void;
+    extra: {
+      request: (enpoint: string, options: TApiOptions) => void;
+    };
+  }
+>(
   `${ActionPrefix.USER}/resetPassword`,
-  async (formData, { rejectWithValue, extra: request }) => {
+  async (formData, { rejectWithValue, extra: { request } }) => {
     try {
-      return await request(ApiRoute.PASSWORD_RESET_RESET, {
+      await request(ApiRoute.PASSWORD_RESET_RESET, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -78,9 +154,18 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
-export const logoutUser = createAsyncThunk(
+export const logoutUser = createAsyncThunk<
+  void,
+  void,
+  {
+    rejectValue: void;
+    extra: {
+      request: (enpoint: string, options: TApiOptions) => void;
+    };
+  }
+>(
   `${ActionPrefix.USER}/logoutUser`,
-  async (_, { rejectWithValue, extra: request }) => {
+  async (_, { rejectWithValue, extra: { request } }) => {
     const refreshToken = getToken(Token.REFRESH_TOKEN);
     try {
       await request(ApiRoute.AUTH_LOGOUT, {
@@ -96,9 +181,22 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-export const refreshUserToken = createAsyncThunk(
+export const refreshUserToken = createAsyncThunk<
+  void,
+  any,
+  {
+    rejectValue: void;
+    dispatch: AppDispatch;
+    extra: {
+      request: (
+        endpoint: string,
+        options: TApiOptions
+      ) => Promise<{ accessToken: string; refreshToken: string }>;
+    };
+  }
+>(
   `${ActionPrefix.USER}/refreshUserToken`,
-  async (asyncAction, { rejectWithValue, dispatch, extra: request }) => {
+  async (asyncAction, { rejectWithValue, dispatch, extra: { request } }) => {
     const token = getToken(Token.REFRESH_TOKEN);
     try {
       const { accessToken, refreshToken } = await request(ApiRoute.AUTH_TOKEN, {
@@ -117,9 +215,22 @@ export const refreshUserToken = createAsyncThunk(
   }
 );
 
-export const fetchUserData = createAsyncThunk(
+export const fetchUserData = createAsyncThunk<
+  TUserData,
+  void,
+  {
+    rejectValue: void;
+    dispatch: AppDispatch;
+    extra: {
+      request: (
+        endpoint: string,
+        options: TApiOptions
+      ) => Promise<{ user: TUserData }>;
+    };
+  }
+>(
   `${ActionPrefix.USER}/fetchUserData`,
-  async (_, { rejectWithValue, dispatch, extra: request }) => {
+  async (_, { rejectWithValue, dispatch, extra: { request } }) => {
     const accessToken = getToken(Token.ACCESS_TOKEN);
 
     try {
@@ -130,8 +241,9 @@ export const fetchUserData = createAsyncThunk(
           Authorization: `${accessToken}`,
         },
       });
+      dispatch(wsAction.wsInitUserOrders());
       return user;
-    } catch (err) {
+    } catch (err: any) {
       if (err.message) {
         dispatch(refreshUserToken(fetchUserData));
         return rejectWithValue();
@@ -141,9 +253,22 @@ export const fetchUserData = createAsyncThunk(
   }
 );
 
-export const updateUserData = createAsyncThunk(
+export const updateUserData = createAsyncThunk<
+  TUserData,
+  TFormData,
+  {
+    rejectValue: void;
+    dispatch: AppDispatch;
+    extra: {
+      request: (
+        endpoint: string,
+        options: TApiOptions
+      ) => Promise<{ user: TUserData }>;
+    };
+  }
+>(
   `${ActionPrefix.USER}/updateUserData`,
-  async (formData, { rejectWithValue, dispatch, extra: request }) => {
+  async (formData, { rejectWithValue, dispatch, extra: { request } }) => {
     const accessToken = getToken(Token.ACCESS_TOKEN);
     try {
       const { user } = await request(ApiRoute.AUTH_USER, {
@@ -155,7 +280,7 @@ export const updateUserData = createAsyncThunk(
         body: JSON.stringify(formData),
       });
       return user;
-    } catch (err) {
+    } catch (err: any) {
       if (err.message) {
         dispatch(refreshUserToken(() => updateUserData(formData)));
         return rejectWithValue();
@@ -166,7 +291,7 @@ export const updateUserData = createAsyncThunk(
 );
 
 // Reducer
-const initialState = {
+const initialState: IUserState = {
   userData: null,
   isLoading: false,
   isError: false,
@@ -274,6 +399,6 @@ const reducer = createReducer(initialState, (builder) => {
 });
 
 // Selectors
-export const getUserState = ({ user }) => user;
+export const getUserState = ({ user }: RootState): IUserState => user;
 
 export default reducer;

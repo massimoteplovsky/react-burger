@@ -1,5 +1,5 @@
 import { useCallback, FC } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { useHistory } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
 import cn from 'classnames';
@@ -28,11 +28,12 @@ import { checkAuth } from '../../utils/helpers';
 
 const BurgerConstructor: FC = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isAuth = checkAuth();
-  const { bunIngredient, mainIngredients } = useSelector(getBurgerIngredients);
-  const { orderNumber, isLoading } = useSelector(getOrderState);
-  const totalPrice = useSelector(getTotalPrice);
+  const { bunIngredient, mainIngredients } =
+    useAppSelector(getBurgerIngredients);
+  const { orderNumber, isLoading } = useAppSelector(getOrderState);
+  const totalPrice = useAppSelector(getTotalPrice);
   const isIngredientsExist = bunIngredient || mainIngredients.length > 0;
   const [{ isHover }, dropRef] = useDrop({
     accept: 'ingredient',
@@ -55,13 +56,11 @@ const BurgerConstructor: FC = () => {
     const ingredientsIds = [bunIngredient, ...mainIngredients].map(
       ({ _id }) => _id
     );
-    // @ts-ignore
     await dispatch(sendOrder(ingredientsIds));
   }, [bunIngredient, mainIngredients, isAuth, dispatch, history]);
 
   const handleDrop = useCallback(
     (ingredient) => {
-      // @ts-ignore
       dispatch(addIngredient(ingredient));
     },
     [dispatch]

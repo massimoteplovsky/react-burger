@@ -1,13 +1,19 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
 import { ActionPrefix } from '../../utils/constants';
+import { RootState } from '../store';
+
+interface IAppState {
+  isError: boolean;
+}
 
 // Actions
-export const setError = createAction(`${ActionPrefix.APP}/setError`);
+export const setError = createAction<boolean>(`${ActionPrefix.APP}/setError`);
 
 // Reducer
-const initialState = {
+const initialState: IAppState = {
   isError: false,
 };
+
 const appReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(setError, (state, { payload }) => {
@@ -17,6 +23,6 @@ const appReducer = createReducer(initialState, (builder) => {
 });
 
 // Selectors
-export const getAppState = ({ app }) => app;
+export const getAppState = ({ app }: RootState): IAppState => app;
 
 export default appReducer;
