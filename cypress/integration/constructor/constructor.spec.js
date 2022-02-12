@@ -32,7 +32,7 @@ describe('Constructor page tests', function () {
     cy.get('@dropSection').trigger('drop');
   });
 
-  it('should make order', () => {
+  it('should make order, open and close modal with order detail', () => {
     cy.get('button').contains('Оформить заказ').click();
     cy.contains('Заказ отправляется...');
     cy.wait('@sendOrder');
