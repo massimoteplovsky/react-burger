@@ -6,9 +6,9 @@ import {
 } from '@reduxjs/toolkit';
 import rootReducer from './ducks';
 import createRequest from '../utils/api';
-import { setError } from './ducks/app';
+import { setError } from './ducks/app/app';
 import { socketMiddleware } from './socketMiddleware';
-import { wsAction } from './ducks/orders';
+import { wsAction } from './ducks/orders/orders';
 
 const wsEndpoint = 'wss://norma.nomoreparties.space/orders';
 

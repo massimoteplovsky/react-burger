@@ -3,14 +3,14 @@ import {
   createAsyncThunk,
   createAction,
 } from '@reduxjs/toolkit';
-import { ApiRoute, Token } from '../../utils/constants';
-import { refreshUserToken } from './user';
-import { ActionPrefix } from '../../utils/constants';
-import { getToken } from '../../utils/helpers';
-import { RootState, AppDispatch } from '../store';
-import { TApiOptions } from '../../utils/prop-validator';
+import { ApiRoute, Token } from '../../../utils/constants';
+import { refreshUserToken } from '../user/user';
+import { ActionPrefix } from '../../../utils/constants';
+import { getToken } from '../../../utils/helpers';
+import { RootState, AppDispatch } from '../../store';
+import { TApiOptions } from '../../../utils/prop-validator';
 
-interface IOrderState {
+export interface IOrderState {
   orderNumber: number | null;
   isLoading: boolean;
 }

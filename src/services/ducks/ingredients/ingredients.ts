@@ -3,13 +3,13 @@ import {
   createAsyncThunk,
   createSelector,
 } from '@reduxjs/toolkit';
-import { ApiRoute } from '../../utils/constants';
-import { ActionPrefix } from '../../utils/constants';
-import { setError } from './app';
-import { RootState, AppDispatch } from '../store';
-import { TIngredient, TIngredients } from '../../utils/prop-validator';
+import { ApiRoute } from '../../../utils/constants';
+import { ActionPrefix } from '../../../utils/constants';
+import { setError } from '../app/app';
+import { RootState, AppDispatch } from '../../store';
+import { TIngredient, TIngredients } from '../../../utils/prop-validator';
 
-interface IIngredientsState {
+export interface IIngredientsState {
   ingredientsList: TIngredients;
   isLoading: boolean;
 }

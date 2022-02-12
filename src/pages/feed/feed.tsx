@@ -1,10 +1,13 @@
 import { ReactNode, useEffect, FC } from 'react';
 import cn from 'classnames';
 import s from './feed.module.css';
-import { getFilteredOrders, getAllOrders } from '../../services/ducks/orders';
+import {
+  getFilteredOrders,
+  getAllOrders,
+} from '../../services/ducks/orders/orders';
 import { useAppSelector, useAppDispatch } from '../../services/hooks';
 import { OrderStatus } from '../../utils/constants';
-import { wsAction } from '../../services/ducks/orders';
+import { wsAction } from '../../services/ducks/orders/orders';
 
 // Components
 import OrderList from '../../components/orders-list/orders-list';

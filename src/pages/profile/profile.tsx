@@ -15,15 +15,15 @@ import {
   logoutUser,
   fetchUserData,
   resetStatus,
-} from '../../services/ducks/user';
-import { getAllOrders } from '../../services/ducks/orders';
+} from '../../services/ducks/user/user';
+import { getAllOrders } from '../../services/ducks/orders/orders';
 import { RoutePath } from '../../utils/constants';
 
 // Components
 import ProfileForm from '../../components/profile-form/profile-form';
 import OrdersList from '../../components/orders-list/orders-list';
 import Loader from '../../components/loader/loader';
-import { wsAction } from '../../services/ducks/orders';
+import { wsAction } from '../../services/ducks/orders/orders';
 
 const Note = {
   [RoutePath.PROFILE]:

@@ -4,18 +4,22 @@ import {
   createSelector,
   createAsyncThunk,
 } from '@reduxjs/toolkit';
-import { IngredientType, ActionPrefix, ApiRoute } from '../../utils/constants';
-import { getAllIngredients } from './ingredients';
-import { chunk } from '../../utils/helpers';
+import {
+  IngredientType,
+  ActionPrefix,
+  ApiRoute,
+} from '../../../utils/constants';
+import { getAllIngredients } from '../ingredients/ingredients';
+import { chunk } from '../../../utils/helpers';
 import {
   TOrderResponse,
   TIngredients,
   TOrder,
-} from '../../utils/prop-validator';
-import { RootState, AppDispatch } from '../store';
-import { setError } from './app';
+} from '../../../utils/prop-validator';
+import { RootState, AppDispatch } from '../../store';
+import { setError } from '../app/app';
 
-interface IOrdersState {
+export interface IOrdersState {
   isLoading: boolean;
   isConnected: boolean;
   ordersData: TOrderResponse | null;
@@ -42,6 +46,9 @@ export const wsConnectionClosed = createAction(
   `${ActionPrefix.ORDERS}/wsConnectionClosed`
 );
 export const wsGetMessage = createAction(`${ActionPrefix.ORDERS}/wsGetMessage`);
+export const clearCurrentOrder = createAction(
+  `${ActionPrefix.ORDERS}/clearCurrentOrder`
+);
 
 export const fetchCurrentOrder = createAsyncThunk<
   TOrder,
@@ -86,6 +93,9 @@ const reducer = createReducer(initialState, (builder) => {
     state.currentOrder = payload;
   });
   builder.addCase(fetchCurrentOrder.rejected, () => initialState);
+  builder.addCase(clearCurrentOrder, (state) => {
+    state.currentOrder = null;
+  });
   builder.addCase(wsConnectionSuccess, (state) => {
     state.isConnected = true;
   });

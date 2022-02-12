@@ -3,13 +3,13 @@ import {
   createAsyncThunk,
   createAction,
 } from '@reduxjs/toolkit';
-import { ApiRoute, ActionPrefix, Token } from '../../utils/constants';
-import { getToken, deleteToken, setToken } from '../../utils/helpers';
-import { RootState, AppDispatch } from '../store';
-import { wsAction } from './orders';
-import { TApiOptions } from '../../utils/prop-validator';
+import { ApiRoute, ActionPrefix, Token } from '../../../utils/constants';
+import { getToken, deleteToken, setToken } from '../../../utils/helpers';
+import { RootState, AppDispatch } from '../../store';
+import { wsAction } from '../orders/orders';
+import { TApiOptions } from '../../../utils/prop-validator';
 
-interface IUserState {
+export interface IUserState {
   userData: {
     name: string;
     email: string;
