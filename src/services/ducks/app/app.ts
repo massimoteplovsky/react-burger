@@ -1,8 +1,8 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
-import { ActionPrefix } from '../../utils/constants';
-import { RootState } from '../store';
+import { ActionPrefix } from '../../../utils/constants';
+import { RootState } from '../../store';
 
-interface IAppState {
+export interface IAppState {
   isError: boolean;
 }
 

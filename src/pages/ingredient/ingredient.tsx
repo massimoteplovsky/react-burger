@@ -6,7 +6,7 @@ import s from './ingredient.module.css';
 import {
   getIngredient,
   getIngredientsState,
-} from '../../services/ducks/ingredients';
+} from '../../services/ducks/ingredients/ingredients';
 import { RoutePath } from '../../utils/constants';
 import { TIngredient } from '../../utils/prop-validator';
 

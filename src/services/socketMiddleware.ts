@@ -8,7 +8,7 @@ import {
 import { Token } from '../utils/constants';
 import { getToken } from '../utils/helpers';
 import { TOrderResponse } from '../utils/prop-validator';
-import { setError } from './ducks/app';
+import { setError } from './ducks/app/app';
 import { AppDispatch, RootState } from './store';
 
 type TSocketActions = {

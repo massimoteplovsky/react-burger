@@ -11,7 +11,7 @@ import s from './main-ingredient.module.css';
 import {
   removeIngredient,
   sortMainIngredients,
-} from '../../services/ducks/burger-ingredients';
+} from '../../services/ducks/burger-ingredients/burger-ingredients';
 
 type TComponentProps = {
   ingredient: TIngredient;

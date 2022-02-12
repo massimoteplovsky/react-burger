@@ -9,12 +9,12 @@ import {
   getTotalPrice,
   addIngredient,
   resetBurgerIngredients,
-} from '../../services/ducks/burger-ingredients';
+} from '../../services/ducks/burger-ingredients/burger-ingredients';
 import {
   sendOrder,
   resetOrder,
   getOrderState,
-} from '../../services/ducks/order';
+} from '../../services/ducks/order/order';
 import { BunPosition, RoutePath } from '../../utils/constants';
 
 // Components

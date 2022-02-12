@@ -10,7 +10,7 @@ import {
 import { useSelector } from 'react-redux';
 import s from './ingredients-list-container.module.css';
 import { TAB_ITEMS } from '../../utils/constants';
-import { getFilteredIngredients } from '../../services/ducks/ingredients';
+import { getFilteredIngredients } from '../../services/ducks/ingredients/ingredients';
 
 // Components
 import IngredientsList from '../ingredients-list/ingredients-list';

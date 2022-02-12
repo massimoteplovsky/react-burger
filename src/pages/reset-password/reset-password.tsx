@@ -13,7 +13,7 @@ import {
   getUserState,
   resetStatus,
   resetPassword,
-} from '../../services/ducks/user';
+} from '../../services/ducks/user/user';
 import { checkAuth } from '../../utils/helpers';
 
 // Components
