@@ -3,7 +3,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { TIngredients } from '../../utils/prop-validator';
 import s from './ingredients-list.module.css';
-import { getBurgerIgredientsIdsCount } from '../../services/ducks/burger-ingredients';
+import { getBurgerIgredientsIdsCount } from '../../services/ducks/burger-ingredients/burger-ingredients';
 import { RoutePath } from '../../utils/constants';
 
 // Components

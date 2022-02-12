@@ -1,10 +1,10 @@
 import { createReducer, createAction, createSelector } from '@reduxjs/toolkit';
-import { IngredientType } from '../../utils/constants';
-import { ActionPrefix } from '../../utils/constants';
-import { RootState } from '../store';
-import { TIngredients, TIngredient } from '../../utils/prop-validator';
+import { IngredientType } from '../../../utils/constants';
+import { ActionPrefix } from '../../../utils/constants';
+import { RootState } from '../../store';
+import { TIngredients, TIngredient } from '../../../utils/prop-validator';
 
-interface IBurgerIngredientsState {
+export interface IBurgerIngredientsState {
   burgerData: {
     bunIngredient: TIngredient | null;
     mainIngredients: TIngredients;

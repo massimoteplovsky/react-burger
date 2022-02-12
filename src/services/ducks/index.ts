@@ -1,9 +1,9 @@
-import appReducer from './app';
-import ingredientsReducer from './ingredients';
-import burderIngredientsReducer from './burger-ingredients';
-import orderReducer from './order';
-import userReducer from './user';
-import ordersReducer from './orders';
+import appReducer from './app/app';
+import ingredientsReducer from './ingredients/ingredients';
+import burderIngredientsReducer from './burger-ingredients/burger-ingredients';
+import orderReducer from './order/order';
+import userReducer from './user/user';
+import ordersReducer from './orders/orders';
 
 const rootReducer = {
   app: appReducer,

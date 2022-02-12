@@ -10,8 +10,8 @@ import {
 import {
   getIngredientsState,
   fetchAllIngredients,
-} from '../../services/ducks/ingredients';
-import { getAppState } from '../../services/ducks/app';
+} from '../../services/ducks/ingredients/ingredients';
+import { getAppState } from '../../services/ducks/app/app';
 import { RoutePath } from '../../utils/constants';
 import { TIngredient, TOrderPopulated } from '../../utils/prop-validator';
 
@@ -75,7 +75,7 @@ const App: FC = () => {
 
   if (isError) {
     return (
-      <Router>
+      <Router basename="/react-burger">
         <Layout>
           <Error>Произошла ошибка на сервере...</Error>
         </Layout>
@@ -89,16 +89,16 @@ const App: FC = () => {
         <Route path={RoutePath.HOME} exact>
           <Home />
         </Route>
-        <Route path={RoutePath.LOGIN}>
+        <Route path={RoutePath.LOGIN} exact>
           <Login />
         </Route>
-        <Route path={RoutePath.REGISTRATION}>
+        <Route path={RoutePath.REGISTRATION} exact>
           <Registration />
         </Route>
-        <Route path={RoutePath.FORGOT_PASSWORD}>
+        <Route path={RoutePath.FORGOT_PASSWORD} exact>
           <ForgotPassword />
         </Route>
-        <Route path={RoutePath.RESET_PASSWORD}>
+        <Route path={RoutePath.RESET_PASSWORD} exact>
           <ResetPassword />
         </Route>
         <ProtectedRoute
@@ -116,7 +116,7 @@ const App: FC = () => {
         <Route path={RoutePath.FEED_ID(':id')} exact>
           <Order />
         </Route>
-        <Route path={RoutePath.INGREDIENT(':id')}>
+        <Route path={RoutePath.INGREDIENT(':id')} exact>
           <Ingredient />
         </Route>
         <Route>

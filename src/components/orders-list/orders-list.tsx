@@ -6,19 +6,13 @@ import { TOrdersPopulated } from '../../utils/prop-validator';
 
 // Components
 import OrderItem from '../order-item/order-item';
-import { RoutePath } from '../../utils/constants';
 
 type TComponentProps = {
   orders: TOrdersPopulated;
   isShownOrderStatus: boolean;
-  isModal?: boolean;
 };
 
-const OrdersList: FC<TComponentProps> = ({
-  orders,
-  isShownOrderStatus,
-  isModal = true,
-}) => {
+const OrdersList: FC<TComponentProps> = ({ orders, isShownOrderStatus }) => {
   const location = useLocation();
   return (
     <div className={s.container}>
@@ -26,14 +20,8 @@ const OrdersList: FC<TComponentProps> = ({
         <Link
           key={order._id}
           to={{
-            pathname: `${
-              location.pathname.includes(RoutePath.FEED)
-                ? RoutePath.FEED
-                : RoutePath.PROFILE_ORDERS
-            }/${order.number}`,
-            state: isModal
-              ? { modalLocation: location, currentOrder: order }
-              : null,
+            pathname: `${location.pathname}/${order.number}`,
+            state: { modalLocation: location, currentOrder: order },
           }}
           className={s.orderLink}
         >

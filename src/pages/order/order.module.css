@@ -2,6 +2,20 @@
   padding: 120px 0;
 }
 
-.orderContainer > h2 {
+.orderNumber {
   text-align: center;
+}
+
+.orderNotFound {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.orderNotFound svg {
+  width: 180px;
+  height: 180px;
+  margin-bottom: 30px;
 }

@@ -8,7 +8,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import s from './profile-form.module.css';
 import { useForm } from '../../hooks/form';
-import { getUserState, updateUserData } from '../../services/ducks/user';
+import { getUserState, updateUserData } from '../../services/ducks/user/user';
 
 const ProfileForm: FC = () => {
   const dispatch = useDispatch();
