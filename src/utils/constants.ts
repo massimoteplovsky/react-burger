@@ -78,3 +78,5 @@ export const RoutePath = {
   PROFILE_ORDERS_ID: (id: string): string => `/profile/orders/${id}`,
   INGREDIENT: (id: string): string => `/ingredients/${id}`,
 };
+
+export const REPO_NAME = '/react-burger';

@@ -12,7 +12,7 @@ import {
   fetchAllIngredients,
 } from '../../services/ducks/ingredients/ingredients';
 import { getAppState } from '../../services/ducks/app/app';
-import { RoutePath } from '../../utils/constants';
+import { RoutePath, REPO_NAME } from '../../utils/constants';
 import { TIngredient, TOrderPopulated } from '../../utils/prop-validator';
 
 // Components
@@ -75,7 +75,7 @@ const App: FC = () => {
 
   if (isError) {
     return (
-      <Router basename="/react-burger">
+      <Router basename={REPO_NAME}>
         <Layout>
           <Error>Произошла ошибка на сервере...</Error>
         </Layout>
