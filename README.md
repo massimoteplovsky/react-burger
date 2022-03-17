@@ -15,8 +15,17 @@
 Link: https://massimoteplovsky.github.io/react-burger/
 
 # Установка
- - cкопируйте проект: git clone https://github.com/massimoteplovsky/react-burger.git
- - установите зависимости: npm install
+ Cкопируйте проект: 
+ 
+ ```
+ git clone https://github.com/massimoteplovsky/react-burger.git
+ ```
+ 
+ Установите зависимости: 
+ 
+ ```
+ npm install
+ ```
 
 # Работа:
 В директории проекта вы можете запустить:
